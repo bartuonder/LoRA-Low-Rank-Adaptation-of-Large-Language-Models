@@ -24,3 +24,5 @@ data_cache/
 paper/*.pdf
 paper/_*.txt
 adapters/
+results/.queue.lock
+results/STOP
