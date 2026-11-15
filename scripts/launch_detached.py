@@ -3,6 +3,7 @@
 The process keeps running after the launching terminal or agent session ends; re-running the
 same command resumes the queue (finished runs are skipped, a live runner is detected by lock).
 """
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -19,10 +20,14 @@ def main() -> int:
     (ROOT / "logs").mkdir(exist_ok=True)
     log = open(ROOT / "logs" / f"{name}.log", "a", encoding="utf-8")
     cmd = [sys.executable, str(ROOT / "scripts" / "run_queue.py"), *args]
-    kwargs = {"stdout": log, "stderr": subprocess.STDOUT, "stdin": subprocess.DEVNULL, "cwd": ROOT}
+    # FOR_DISABLE_CONSOLE_CTRL_HANDLER: the Fortran runtime inside torch/MKL otherwise aborts the
+    # process on a console-close event ("forrtl: error (200)"), which killed earlier runners.
+    env = {**os.environ, "FOR_DISABLE_CONSOLE_CTRL_HANDLER": "1", "PYTHONUNBUFFERED": "1"}
+    kwargs = {"stdout": log, "stderr": subprocess.STDOUT, "stdin": subprocess.DEVNULL, "cwd": ROOT,
+              "env": env}
     if sys.platform == "win32":
-        kwargs["creationflags"] = (subprocess.DETACHED_PROCESS
-                                   | subprocess.CREATE_NEW_PROCESS_GROUP
+        # own hidden console: independent of the launching terminal
+        kwargs["creationflags"] = (subprocess.CREATE_NEW_PROCESS_GROUP
                                    | subprocess.CREATE_NO_WINDOW)
     else:
         kwargs["start_new_session"] = True
