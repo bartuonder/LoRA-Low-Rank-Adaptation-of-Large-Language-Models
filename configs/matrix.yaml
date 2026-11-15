@@ -1,0 +1,36 @@
+# Run matrix executed by scripts/run_queue.py. Order inside the file is the priority order.
+# Budget reductions (docs/compute_plan.md) are applied by editing the seed lists below and are
+# recorded in docs/deviations.md.
+lora_config: configs/lora_roberta_base.yaml
+ft_config: configs/ft_roberta_base.yaml
+
+core:
+  # small tasks first so that partial results are always useful
+  stages:
+    - tasks: [rte, mrpc, stsb, cola]
+      seeds: [0, 1, 2, 3, 4]
+    - tasks: [sst2]
+      seeds: [0, 1, 2, 3, 4]
+  methods: [lora, ft]
+  lora: {r: 8, alpha: 8, targets: [query, value]}
+
+rank_ablation:
+  ranks: [1, 2, 4, 8]       # r = 8 is the paper default and is shared with the core runs
+  alpha_over_r: 1.0         # Table 9: alpha = r = 8
+  targets: [query, value]
+  stages:
+    - tasks: [rte, mrpc, stsb, cola]
+      seeds: [0, 1, 2, 3, 4]
+    - tasks: [sst2]
+      seeds: [0, 1, 2, 3, 4]
+
+projection_ablation:
+  alpha_over_r: 1.0
+  tasks: [rte, mrpc, stsb]
+  seeds: [0, 1, 2, 3, 4]
+  # r x (number of matrices) = 16 keeps the LoRA parameter count at the paper default (r=8, Wq+Wv)
+  variants:
+    - {name: q_only, targets: [query], r: 16}
+    - {name: v_only, targets: [value], r: 16}
+    - {name: qv, targets: [query, value], r: 8}          # paper default, reuses core runs
+    - {name: qkvo, targets: [query, key, value, output], r: 4}
