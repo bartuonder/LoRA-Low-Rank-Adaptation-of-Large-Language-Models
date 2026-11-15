@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it together with the original LoRA paper."
+title: "LoRA on RoBERTa-base (GLUE): a reproduction"
+type: software
+license: MIT
+authors:
+  - family-names: "Önder"
+    given-names: "Bartu"
+references:
+  - type: article
+    title: "LoRA: Low-Rank Adaptation of Large Language Models"
+    authors:
+      - {family-names: "Hu", given-names: "Edward J."}
+      - {family-names: "Shen", given-names: "Yelong"}
+      - {family-names: "Wallis", given-names: "Phillip"}
+      - {family-names: "Allen-Zhu", given-names: "Zeyuan"}
+      - {family-names: "Li", given-names: "Yuanzhi"}
+      - {family-names: "Wang", given-names: "Shean"}
+      - {family-names: "Wang", given-names: "Lu"}
+      - {family-names: "Chen", given-names: "Weizhu"}
+    journal: "arXiv preprint arXiv:2106.09685"
+    year: 2021
+    url: "https://arxiv.org/abs/2106.09685"
