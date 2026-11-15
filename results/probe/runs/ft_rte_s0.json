@@ -1,0 +1,75 @@
+{
+ "row": {
+  "run_id": "ft_rte_s0",
+  "task": "rte",
+  "method": "ft",
+  "rank": "",
+  "alpha": "",
+  "targets": "",
+  "seed": 0,
+  "epochs": 1,
+  "lr": 2e-05,
+  "batch_size": 16,
+  "metric": "accuracy",
+  "status": "ok",
+  "best_epoch": 1,
+  "best_metric": 57.761732851985556,
+  "final_epoch": 1,
+  "final_metric": 57.761732851985556,
+  "epoch_metrics": "[57.7617]",
+  "trainable_params": 124647170,
+  "head_params": 592130,
+  "train_time_s": 8.2,
+  "config_hash": "7ba71e3ccfcf",
+  "commit": "b96f1cc",
+  "finished_at": "2026-11-16T00:11:22",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.23.0",
+  "gpu": "NVIDIA GeForce RTX 4070 SUPER"
+ },
+ "config": {
+  "method": "ft",
+  "model": "roberta-base",
+  "optim": {
+   "name": "adamw",
+   "warmup_ratio": 0.06,
+   "schedule": "linear",
+   "weight_decay": 0.1,
+   "betas": [
+    0.9,
+    0.98
+   ],
+   "eps": 1e-06,
+   "max_grad_norm": 1.0
+  },
+  "max_seq_len": 512,
+  "precision": "bf16",
+  "eval_every_epoch": true,
+  "selection": "best_epoch",
+  "init_from_mnli": false,
+  "task": "rte",
+  "glue_name": "rte",
+  "metric": "accuracy",
+  "batch_size": 16,
+  "epochs": 1,
+  "lr": 2e-05
+ },
+ "env": {
+  "python": "3.13.7",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.23.0",
+  "datasets": "5.2.0",
+  "numpy": "2.5.4",
+  "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+  "cuda": "12.8"
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 0.6934064718393179,
+   "dev_metric": 57.761732851985556,
+   "lr_end": 0.0,
+   "epoch_time_s": 8.164104700088501
+  }
+ ]
+}

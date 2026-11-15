@@ -1,0 +1,85 @@
+{
+ "row": {
+  "run_id": "lora_cola_r8_qv_s0",
+  "task": "cola",
+  "method": "lora",
+  "rank": 8,
+  "alpha": 8,
+  "targets": "query+value",
+  "seed": 0,
+  "epochs": 1,
+  "lr": 0.0004,
+  "batch_size": 32,
+  "metric": "matthews_correlation",
+  "status": "ok",
+  "best_epoch": 1,
+  "best_metric": 38.80516330500076,
+  "final_epoch": 1,
+  "final_metric": 38.80516330500076,
+  "epoch_metrics": "[38.8052]",
+  "trainable_params": 887042,
+  "head_params": 592130,
+  "train_time_s": 10.7,
+  "config_hash": "90f8c45fd3e6",
+  "commit": "b96f1cc",
+  "finished_at": "2026-11-16T00:13:29",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.23.0",
+  "gpu": "NVIDIA GeForce RTX 4070 SUPER"
+ },
+ "config": {
+  "method": "lora",
+  "model": "roberta-base",
+  "lora": {
+   "r": 8,
+   "alpha": 8,
+   "dropout": 0.0,
+   "targets": [
+    "query",
+    "value"
+   ],
+   "train_head": true
+  },
+  "optim": {
+   "name": "adamw",
+   "warmup_ratio": 0.06,
+   "schedule": "linear",
+   "weight_decay": 0.1,
+   "betas": [
+    0.9,
+    0.98
+   ],
+   "eps": 1e-06,
+   "max_grad_norm": 1.0
+  },
+  "max_seq_len": 512,
+  "precision": "bf16",
+  "eval_every_epoch": true,
+  "selection": "best_epoch",
+  "init_from_mnli": false,
+  "task": "cola",
+  "glue_name": "cola",
+  "metric": "matthews_correlation",
+  "batch_size": 32,
+  "epochs": 1,
+  "lr": 0.0004
+ },
+ "env": {
+  "python": "3.13.7",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.23.0",
+  "datasets": "5.2.0",
+  "numpy": "2.5.4",
+  "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+  "cuda": "12.8"
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 0.5443803587956215,
+   "dev_metric": 38.80516330500076,
+   "lr_end": 0.0,
+   "epoch_time_s": 10.722139358520508
+  }
+ ]
+}

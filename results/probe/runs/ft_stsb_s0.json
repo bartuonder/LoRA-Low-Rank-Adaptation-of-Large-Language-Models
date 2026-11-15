@@ -1,0 +1,75 @@
+{
+ "row": {
+  "run_id": "ft_stsb_s0",
+  "task": "stsb",
+  "method": "ft",
+  "rank": "",
+  "alpha": "",
+  "targets": "",
+  "seed": 0,
+  "epochs": 1,
+  "lr": 2e-05,
+  "batch_size": 16,
+  "metric": "pearson",
+  "status": "ok",
+  "best_epoch": 1,
+  "best_metric": 87.85499930381775,
+  "final_epoch": 1,
+  "final_metric": 87.85499930381775,
+  "epoch_metrics": "[87.855]",
+  "trainable_params": 124646401,
+  "head_params": 591361,
+  "train_time_s": 12.7,
+  "config_hash": "086685e30539",
+  "commit": "b96f1cc",
+  "finished_at": "2026-11-16T00:13:01",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.23.0",
+  "gpu": "NVIDIA GeForce RTX 4070 SUPER"
+ },
+ "config": {
+  "method": "ft",
+  "model": "roberta-base",
+  "optim": {
+   "name": "adamw",
+   "warmup_ratio": 0.06,
+   "schedule": "linear",
+   "weight_decay": 0.1,
+   "betas": [
+    0.9,
+    0.98
+   ],
+   "eps": 1e-06,
+   "max_grad_norm": 1.0
+  },
+  "max_seq_len": 512,
+  "precision": "bf16",
+  "eval_every_epoch": true,
+  "selection": "best_epoch",
+  "init_from_mnli": false,
+  "task": "stsb",
+  "glue_name": "stsb",
+  "metric": "pearson",
+  "batch_size": 16,
+  "epochs": 1,
+  "lr": 2e-05
+ },
+ "env": {
+  "python": "3.13.7",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.23.0",
+  "datasets": "5.2.0",
+  "numpy": "2.5.4",
+  "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+  "cuda": "12.8"
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 1.2664052327473958,
+   "dev_metric": 87.85499930381775,
+   "lr_end": 0.0,
+   "epoch_time_s": 12.713293552398682
+  }
+ ]
+}

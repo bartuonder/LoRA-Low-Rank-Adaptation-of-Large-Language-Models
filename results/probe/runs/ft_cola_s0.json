@@ -1,0 +1,75 @@
+{
+ "row": {
+  "run_id": "ft_cola_s0",
+  "task": "cola",
+  "method": "ft",
+  "rank": "",
+  "alpha": "",
+  "targets": "",
+  "seed": 0,
+  "epochs": 1,
+  "lr": 2e-05,
+  "batch_size": 16,
+  "metric": "matthews_correlation",
+  "status": "ok",
+  "best_epoch": 1,
+  "best_metric": 50.45859154729114,
+  "final_epoch": 1,
+  "final_metric": 50.45859154729114,
+  "epoch_metrics": "[50.4586]",
+  "trainable_params": 124647170,
+  "head_params": 592130,
+  "train_time_s": 18.6,
+  "config_hash": "01ff84669da4",
+  "commit": "b96f1cc",
+  "finished_at": "2026-11-16T00:14:01",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.23.0",
+  "gpu": "NVIDIA GeForce RTX 4070 SUPER"
+ },
+ "config": {
+  "method": "ft",
+  "model": "roberta-base",
+  "optim": {
+   "name": "adamw",
+   "warmup_ratio": 0.06,
+   "schedule": "linear",
+   "weight_decay": 0.1,
+   "betas": [
+    0.9,
+    0.98
+   ],
+   "eps": 1e-06,
+   "max_grad_norm": 1.0
+  },
+  "max_seq_len": 512,
+  "precision": "bf16",
+  "eval_every_epoch": true,
+  "selection": "best_epoch",
+  "init_from_mnli": false,
+  "task": "cola",
+  "glue_name": "cola",
+  "metric": "matthews_correlation",
+  "batch_size": 16,
+  "epochs": 1,
+  "lr": 2e-05
+ },
+ "env": {
+  "python": "3.13.7",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.23.0",
+  "datasets": "5.2.0",
+  "numpy": "2.5.4",
+  "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+  "cuda": "12.8"
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 0.48100255092727806,
+   "dev_metric": 50.45859154729114,
+   "lr_end": 0.0,
+   "epoch_time_s": 18.565860509872437
+  }
+ ]
+}
