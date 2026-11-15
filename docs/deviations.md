@@ -32,10 +32,12 @@ seeing results.
 
 ## Compute-budget reductions
 
-Filled in after the timing probe (see `docs/compute_plan.md`).
+The timing probe estimates the full matrix (5 seeds for every task and configuration) at
+less than the 72 GPU-hour budget (see `docs/compute_plan.md`), so no step of the reduction
+ladder was applied.
 
 | Step | Applied | Effect |
 |---|---|---|
-| 1. Drop SST-2 from the rank ablation | pending | |
-| 2. Rank-ablation seeds 5 -> 3 for CoLA | pending | |
-| 3. Core seeds 5 -> 3 for SST-2 | pending | |
+| 1. Drop SST-2 from the rank ablation | no | none |
+| 2. Rank-ablation seeds 5 -> 3 for CoLA | no | none |
+| 3. Core seeds 5 -> 3 for SST-2 | no | none |
