@@ -169,10 +169,11 @@ def env_info() -> dict:
 
 
 def run_training(cfg: dict, seed: int, results_dir: Path, ckpt_dir: Path,
-                 data_limit: int | None = None, log=print,
+                 data_limit: int | None = None, log=None,
                  adapters_dir: Path | None = None) -> dict:
     from transformers import AutoTokenizer
 
+    log = log or (lambda *a: print(*a, flush=True))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     rid = run_id(cfg, seed)
     chash = config_hash(cfg)
