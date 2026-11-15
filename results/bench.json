@@ -1,0 +1,259 @@
+{
+ "commit": "ea81122",
+ "torch": "2.11.0+cu128",
+ "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+ "model": "roberta-base",
+ "sizes": {
+  "params": [
+   {
+    "method": "ft",
+    "lora": 0,
+    "head": 0,
+    "trainable": 124647170,
+    "total": 124647170
+   },
+   {
+    "method": "lora",
+    "rank": 1,
+    "lora": 36864,
+    "head": 592130,
+    "other": 0,
+    "trainable": 628994,
+    "total": 124684034
+   },
+   {
+    "method": "lora",
+    "rank": 2,
+    "lora": 73728,
+    "head": 592130,
+    "other": 0,
+    "trainable": 665858,
+    "total": 124720898
+   },
+   {
+    "method": "lora",
+    "rank": 4,
+    "lora": 147456,
+    "head": 592130,
+    "other": 0,
+    "trainable": 739586,
+    "total": 124794626
+   },
+   {
+    "method": "lora",
+    "rank": 8,
+    "lora": 294912,
+    "head": 592130,
+    "other": 0,
+    "trainable": 887042,
+    "total": 124942082
+   }
+  ],
+  "files": {
+   "full_checkpoint_bytes": 498668589,
+   "adapter_r1_ab_head_bytes": 2532871,
+   "adapter_r1_ab_only_bytes": 163155,
+   "adapter_r2_ab_head_bytes": 2680327,
+   "adapter_r2_ab_only_bytes": 310611,
+   "adapter_r4_ab_head_bytes": 2975239,
+   "adapter_r4_ab_only_bytes": 605523,
+   "adapter_r8_ab_head_bytes": 3565063,
+   "adapter_r8_ab_only_bytes": 1195347
+  }
+ },
+ "latency": [
+  {
+   "batch": 1,
+   "seq": 128,
+   "precision": "fp32",
+   "state": "unmerged",
+   "median_ms": 7.9853500064928085,
+   "q1_ms": 7.797425001626834,
+   "q3_ms": 8.902225032215938,
+   "mean_ms": 9.087200667321062,
+   "iters": 300
+  },
+  {
+   "batch": 1,
+   "seq": 128,
+   "precision": "fp32",
+   "state": "merged",
+   "median_ms": 6.090849987231195,
+   "q1_ms": 5.604300007689744,
+   "q3_ms": 8.372599972062744,
+   "mean_ms": 7.314301333002125,
+   "iters": 300
+  },
+  {
+   "batch": 1,
+   "seq": 128,
+   "precision": "bf16",
+   "state": "unmerged",
+   "median_ms": 12.877600005595013,
+   "q1_ms": 10.942450011498295,
+   "q3_ms": 16.0961999790743,
+   "mean_ms": 13.676007999456488,
+   "iters": 300
+  },
+  {
+   "batch": 1,
+   "seq": 128,
+   "precision": "bf16",
+   "state": "merged",
+   "median_ms": 8.160650002537295,
+   "q1_ms": 7.687975026783533,
+   "q3_ms": 10.914449987467378,
+   "mean_ms": 9.719421998791708,
+   "iters": 300
+  },
+  {
+   "batch": 16,
+   "seq": 128,
+   "precision": "fp32",
+   "state": "unmerged",
+   "median_ms": 22.788300004322082,
+   "q1_ms": 22.540800026035868,
+   "q3_ms": 23.746900013065897,
+   "mean_ms": 23.169912999340642,
+   "iters": 300
+  },
+  {
+   "batch": 16,
+   "seq": 128,
+   "precision": "fp32",
+   "state": "merged",
+   "median_ms": 21.943400002783164,
+   "q1_ms": 21.692550042644143,
+   "q3_ms": 22.72477501537651,
+   "mean_ms": 22.2627253322086,
+   "iters": 300
+  },
+  {
+   "batch": 16,
+   "seq": 128,
+   "precision": "bf16",
+   "state": "unmerged",
+   "median_ms": 10.442900005728006,
+   "q1_ms": 10.268674959661439,
+   "q3_ms": 10.788699990371242,
+   "mean_ms": 10.70913166719644,
+   "iters": 300
+  },
+  {
+   "batch": 16,
+   "seq": 128,
+   "precision": "bf16",
+   "state": "merged",
+   "median_ms": 8.862449991283938,
+   "q1_ms": 8.84070002939552,
+   "q3_ms": 8.912274992326275,
+   "mean_ms": 9.024323333869688,
+   "iters": 300
+  },
+  {
+   "batch": 32,
+   "seq": 128,
+   "precision": "fp32",
+   "state": "unmerged",
+   "median_ms": 45.44124999665655,
+   "q1_ms": 44.90357499162201,
+   "q3_ms": 46.083900015219115,
+   "mean_ms": 45.48586333189936,
+   "iters": 300
+  },
+  {
+   "batch": 32,
+   "seq": 128,
+   "precision": "fp32",
+   "state": "merged",
+   "median_ms": 43.94170001614839,
+   "q1_ms": 43.53402498236392,
+   "q3_ms": 44.48725000838749,
+   "mean_ms": 44.00021366813841,
+   "iters": 300
+  },
+  {
+   "batch": 32,
+   "seq": 128,
+   "precision": "bf16",
+   "state": "unmerged",
+   "median_ms": 17.102549987612292,
+   "q1_ms": 17.055700009223074,
+   "q3_ms": 17.30987498012837,
+   "mean_ms": 17.306599333145034,
+   "iters": 300
+  },
+  {
+   "batch": 32,
+   "seq": 128,
+   "precision": "bf16",
+   "state": "merged",
+   "median_ms": 15.817150007933378,
+   "q1_ms": 15.79132498591207,
+   "q3_ms": 16.016399982618168,
+   "mean_ms": 16.02920166760062,
+   "iters": 300
+  },
+  {
+   "max_abs_logit_diff_merged_vs_unmerged": 7.450580596923828e-08
+  }
+ ],
+ "memory": [
+  {
+   "method": "lora",
+   "mode": "train",
+   "batch": 16,
+   "seq": 128,
+   "peak_mib": 1270.74755859375
+  },
+  {
+   "method": "lora",
+   "mode": "inference",
+   "batch": 16,
+   "seq": 128,
+   "peak_mib": 541.01513671875
+  },
+  {
+   "method": "ft",
+   "mode": "train",
+   "batch": 16,
+   "seq": 128,
+   "peak_mib": 2475.62109375
+  },
+  {
+   "method": "ft",
+   "mode": "inference",
+   "batch": 16,
+   "seq": 128,
+   "peak_mib": 729.79833984375
+  },
+  {
+   "method": "lora",
+   "mode": "train",
+   "batch": 32,
+   "seq": 128,
+   "peak_mib": 1853.15380859375
+  },
+  {
+   "method": "lora",
+   "mode": "inference",
+   "batch": 32,
+   "seq": 128,
+   "peak_mib": 586.54638671875
+  },
+  {
+   "method": "ft",
+   "mode": "train",
+   "batch": 32,
+   "seq": 128,
+   "peak_mib": 3253.42626953125
+  },
+  {
+   "method": "ft",
+   "mode": "inference",
+   "batch": 32,
+   "seq": 128,
+   "peak_mib": 771.20458984375
+  }
+ ]
+}
