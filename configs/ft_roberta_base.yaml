@@ -1,0 +1,33 @@
+# Full fine-tuning baseline on RoBERTa-base / GLUE, run through the same code path as LoRA.
+# Hyperparameters follow the GLUE fine-tuning recipe of Liu et al. (2019), Table 10 and
+# Section 5.1. Liu et al. sweep lr in {1e-5, 2e-5, 3e-5} and batch size in {16, 32}; to avoid
+# any per-task tuning, one fixed point of that grid is used for every task (the middle
+# learning rate and the smaller batch size). The remaining values are Liu et al.'s.
+method: ft
+model: roberta-base
+
+optim:
+  name: adamw
+  warmup_ratio: 0.06        # Liu et al. Table 10
+  schedule: linear          # Liu et al. Table 10
+  weight_decay: 0.1         # Liu et al. Table 10 (GLUE)
+  betas: [0.9, 0.98]        # Liu et al. Table 9 (kept from pre-training)
+  eps: 1.0e-6               # Liu et al. Table 9
+  max_grad_norm: 1.0        # unspecified
+
+max_seq_len: 512
+precision: bf16
+eval_every_epoch: true
+selection: best_epoch       # Liu et al.: early stopping on the dev metric
+init_from_mnli: false       # Liu et al. start RTE/STS-B/MRPC from an MNLI model; not done here
+
+tasks:
+  sst2: {glue_name: sst2, metric: accuracy, batch_size: 16, epochs: 10, lr: 2.0e-5}
+  mrpc: {glue_name: mrpc, metric: accuracy, batch_size: 16, epochs: 10, lr: 2.0e-5}
+  cola: {glue_name: cola, metric: matthews_correlation, batch_size: 16, epochs: 10, lr: 2.0e-5}
+  rte: {glue_name: rte, metric: accuracy, batch_size: 16, epochs: 10, lr: 2.0e-5}
+  stsb: {glue_name: stsb, metric: pearson, batch_size: 16, epochs: 10, lr: 2.0e-5}
+  # Out of scope for this project: configuration only, never run.
+  mnli: {enabled: false, glue_name: mnli, metric: accuracy, batch_size: 16, epochs: 10, lr: 2.0e-5}
+  qnli: {enabled: false, glue_name: qnli, metric: accuracy, batch_size: 16, epochs: 10, lr: 2.0e-5}
+  qqp: {enabled: false, glue_name: qqp, metric: accuracy, batch_size: 16, epochs: 10, lr: 2.0e-5}
