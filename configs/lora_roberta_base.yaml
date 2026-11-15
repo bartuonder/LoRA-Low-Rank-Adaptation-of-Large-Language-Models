@@ -1,0 +1,83 @@
+# LoRA on RoBERTa-base / GLUE.
+# Per-task values (batch size, epochs, learning rate), r, alpha, warmup ratio, schedule and
+# max sequence length are copied from Table 9 of Hu et al. (2021), "RoBERTa base LoRA" block.
+# Values marked "unspecified" are not given in the paper; see docs/deviations.md.
+method: lora
+model: roberta-base
+
+lora:
+  r: 8                      # Table 9: r_q = r_v = 8
+  alpha: 8                  # Table 9: LoRA alpha 8 (alpha/r = 1)
+  dropout: 0.0              # unspecified for RoBERTa
+  targets: [query, value]   # Table 9: LoRA on W_q and W_v
+  train_head: true          # unspecified; the head is randomly initialised and must be trained
+
+optim:
+  name: adamw               # Table 9
+  warmup_ratio: 0.06        # Table 9
+  schedule: linear          # Table 9
+  weight_decay: 0.1         # unspecified; GLUE fine-tuning value of Liu et al. (2019), Table 10
+  betas: [0.9, 0.98]        # unspecified; RoBERTa pre-training values (Liu et al., Table 9)
+  eps: 1.0e-6               # unspecified; RoBERTa pre-training value
+  max_grad_norm: 1.0        # unspecified
+
+max_seq_len: 512            # Table 9 (RoBERTa base)
+precision: bf16             # autocast; parameters stay fp32
+eval_every_epoch: true
+selection: best_epoch       # Appendix D.1: result taken from the best epoch
+init_from_mnli: false       # planned deviation: MRPC/RTE/STS-B start from the pre-trained model
+
+# Table 9 column order is MNLI SST-2 MRPC CoLA QNLI QQP RTE STS-B.
+tasks:
+  sst2:
+    glue_name: sst2
+    metric: accuracy
+    batch_size: 16
+    epochs: 60
+    lr: 5.0e-4
+  mrpc:
+    glue_name: mrpc
+    metric: accuracy
+    batch_size: 16
+    epochs: 30
+    lr: 4.0e-4
+  cola:
+    glue_name: cola
+    metric: matthews_correlation
+    batch_size: 32
+    epochs: 80
+    lr: 4.0e-4
+  rte:
+    glue_name: rte
+    metric: accuracy
+    batch_size: 32
+    epochs: 80
+    lr: 5.0e-4
+  stsb:
+    glue_name: stsb
+    metric: pearson
+    batch_size: 16
+    epochs: 40
+    lr: 4.0e-4
+  # Out of scope for this project: configuration only, never run.
+  mnli:
+    enabled: false
+    glue_name: mnli
+    metric: accuracy
+    batch_size: 16
+    epochs: 30
+    lr: 5.0e-4
+  qnli:
+    enabled: false
+    glue_name: qnli
+    metric: accuracy
+    batch_size: 32
+    epochs: 25
+    lr: 4.0e-4
+  qqp:
+    enabled: false
+    glue_name: qqp
+    metric: accuracy
+    batch_size: 16
+    epochs: 25
+    lr: 5.0e-4
