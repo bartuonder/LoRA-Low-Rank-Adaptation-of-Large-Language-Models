@@ -27,6 +27,10 @@ from lora.matrix import Entry, build, load_matrix  # noqa: E402
 
 MAX_RETRIES = 2
 OOM_RC = 3
+# The runner is detached from any console. Without CREATE_NO_WINDOW every training child gets
+# its own console, and a console-close event kills it (Fortran runtime: "window-CLOSE").
+CHILD_FLAGS = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+CHILD_ENV = {**os.environ, "FOR_DISABLE_CONSOLE_CTRL_HANDLER": "1", "PYTHONUNBUFFERED": "1"}
 
 
 def done_keys(results_dir: Path) -> set:
@@ -134,7 +138,8 @@ def main() -> int:
                     lf.write(f"\n=== attempt {attempt} micro_batch={micro} ===\n")
                     lf.flush()
                     rc = subprocess.call(command(e, matrix, results_dir, micro), stdout=lf,
-                                         stderr=subprocess.STDOUT, cwd=ROOT)
+                                         stderr=subprocess.STDOUT, cwd=ROOT, env=CHILD_ENV,
+                                         creationflags=CHILD_FLAGS)
                 if rc == 0:
                     break
                 if rc == OOM_RC:
