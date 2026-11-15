@@ -1,0 +1,121 @@
+# Numbers transcribed from Hu et al. (2021), arXiv 2106.09685.
+# Verified against the PDF text by scripts/verify_paper_numbers.py.
+source:
+  paper: "LoRA: Low-Rank Adaptation of Large Language Models"
+  arxiv: "2106.09685"
+  table: "Table 2 (RoBERTa-base rows); protocol from Appendix D.1"
+  ft_origin: "Fine-tuning row is quoted from Liu et al. (2019), arXiv 1907.11692, Table 8 (dev set)"
+
+protocol:
+  statistic: median            # "We report the median over 5 random seeds" (Appendix D.1)
+  seeds: 5
+  epoch_selection: best_epoch  # "the result for each run is taken from the best epoch"
+  # The paper does not state the evaluation split in the RoBERTa section.
+  # The FT row equals the dev-set numbers of Liu et al., Table 8.
+  dagger_rows_for_base: false  # Table 2 has dagger rows for RoBERTa-large only
+  mnli_start_for: [MRPC, RTE, STS-B]  # LoRA modules initialised from best MNLI checkpoint (Appendix D.1)
+
+metrics:
+  SST-2: accuracy
+  RTE: accuracy
+  MRPC: accuracy
+  CoLA: matthews_correlation
+  STS-B: pearson_correlation
+
+# Table 2, RoBERTa-base. value = reported number, std = value after the plus-minus sign
+# (absent if the row has none). Columns outside the project scope are kept for completeness.
+roberta_base:
+  ft:
+    label: "RoB-base (FT)*"
+    trainable_params_m: 125.0
+    scores:
+      MNLI: {value: 87.6}
+      SST-2: {value: 94.8}
+      MRPC: {value: 90.2}
+      CoLA: {value: 63.6}
+      QNLI: {value: 92.8}
+      QQP: {value: 91.9}
+      RTE: {value: 78.7}
+      STS-B: {value: 91.2}
+    avg: 86.4
+  bitfit:
+    label: "RoB-base (BitFit)*"
+    trainable_params_m: 0.1
+    scores:
+      MNLI: {value: 84.7}
+      SST-2: {value: 93.7}
+      MRPC: {value: 92.7}
+      CoLA: {value: 62.0}
+      QNLI: {value: 91.8}
+      QQP: {value: 84.0}
+      RTE: {value: 81.5}
+      STS-B: {value: 90.8}
+    avg: 85.2
+  adapter_d_0_3m:
+    label: "RoB-base (AdptD)* 0.3M"
+    trainable_params_m: 0.3
+    scores:
+      MNLI: {value: 87.1, std: 0.0}
+      SST-2: {value: 94.2, std: 0.1}
+      MRPC: {value: 88.5, std: 1.1}
+      CoLA: {value: 60.8, std: 0.4}
+      QNLI: {value: 93.1, std: 0.1}
+      QQP: {value: 90.2, std: 0.0}
+      RTE: {value: 71.5, std: 2.7}
+      STS-B: {value: 89.7, std: 0.3}
+    avg: 84.4
+  adapter_d_0_9m:
+    label: "RoB-base (AdptD)* 0.9M"
+    trainable_params_m: 0.9
+    scores:
+      MNLI: {value: 87.3, std: 0.1}
+      SST-2: {value: 94.7, std: 0.3}
+      MRPC: {value: 88.4, std: 0.1}
+      CoLA: {value: 62.6, std: 0.9}
+      QNLI: {value: 93.0, std: 0.2}
+      QQP: {value: 90.6, std: 0.0}
+      RTE: {value: 75.9, std: 2.2}
+      STS-B: {value: 90.3, std: 0.1}
+    avg: 85.4
+  lora:
+    label: "RoB-base (LoRA)"
+    trainable_params_m: 0.3
+    scores:
+      MNLI: {value: 87.5, std: 0.3}
+      SST-2: {value: 95.1, std: 0.2}
+      MRPC: {value: 89.7, std: 0.7}
+      CoLA: {value: 63.4, std: 1.2}
+      QNLI: {value: 93.3, std: 0.3}
+      QQP: {value: 90.8, std: 0.1}
+      RTE: {value: 86.6, std: 0.7}
+      STS-B: {value: 91.5, std: 0.2}
+    avg: 87.2
+
+# Table 9, RoBERTa-base LoRA block. Column order in the paper: MNLI SST-2 MRPC CoLA QNLI QQP RTE STS-B.
+hyperparameters_table9_base:
+  optimizer: AdamW
+  warmup_ratio: 0.06
+  lr_schedule: linear
+  lora_rank: {q: 8, v: 8}
+  lora_alpha: 8
+  max_seq_len: 512
+  per_task:
+    MNLI: {batch_size: 16, epochs: 30, lr: 5.0e-4}
+    SST-2: {batch_size: 16, epochs: 60, lr: 5.0e-4}
+    MRPC: {batch_size: 16, epochs: 30, lr: 4.0e-4}
+    CoLA: {batch_size: 32, epochs: 80, lr: 4.0e-4}
+    QNLI: {batch_size: 32, epochs: 25, lr: 4.0e-4}
+    QQP: {batch_size: 16, epochs: 25, lr: 5.0e-4}
+    RTE: {batch_size: 32, epochs: 80, lr: 5.0e-4}
+    STS-B: {batch_size: 16, epochs: 40, lr: 4.0e-4}
+
+# Liu et al. (2019), Table 10 and Section 5.1 (fine-tuning recipe used for the FT baseline).
+liu2019_finetuning:
+  lr_grid: [1.0e-5, 2.0e-5, 3.0e-5]
+  batch_size_grid: [16, 32]
+  weight_decay: 0.1
+  max_epochs: 10
+  warmup_ratio: 0.06
+  lr_schedule: linear
+  selection: "early stopping on dev metric; median over 5 seeds"
+  rest_from_pretraining: {adam_beta1: 0.9, adam_beta2: 0.98, adam_eps: 1.0e-6, dropout: 0.1}
