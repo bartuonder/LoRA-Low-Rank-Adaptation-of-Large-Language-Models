@@ -1,0 +1,29 @@
+# Text-only hypotheses for the "likely reason" column of the paper-vs-reproduction table.
+# No numbers here: scripts/make_report.py chooses `lower`, `higher` or `close` from the data
+# (close = the median differs from the paper value by no more than the paper's printed spread).
+# Every entry is a hypothesis about a difference, not a verified cause.
+tasks:
+  sst2:
+    close: "Large training set; no MNLI start is involved, so close agreement is expected."
+    lower: "Hypothesis: unspecified settings (weight decay, optimizer betas, adapter initialisation scale) or bf16 autocast differ from the original runs."
+    higher: "Hypothesis: unspecified settings (weight decay, optimizer betas, adapter initialisation scale) or bf16 autocast differ from the original runs."
+  cola:
+    close: "No MNLI start is involved; close agreement is expected."
+    lower: "Hypothesis: Matthews correlation is sensitive to the seed and to unspecified settings (weight decay, initialisation scale); the median of a few seeds is noisy."
+    higher: "Hypothesis: Matthews correlation is sensitive to the seed and to unspecified settings (weight decay, initialisation scale); the median of a few seeds is noisy."
+  mrpc:
+    close: "Agreement despite the pre-trained start."
+    lower: "Hypothesis: the published run starts from an MNLI-adapted checkpoint, which transfers to paraphrase detection; here the start is the pre-trained model."
+    higher: "Hypothesis: seed variance on a small dev set and unspecified settings; the MNLI start is absent here, which would be expected to lower the score."
+  rte:
+    close: "Agreement despite the pre-trained start."
+    lower: "Hypothesis: the published run starts from an MNLI-adapted checkpoint, which is known to help the small RTE task considerably; here the start is the pre-trained model."
+    higher: "Hypothesis: seed variance on a very small dev set; the MNLI start is absent here, which would be expected to lower the score."
+  stsb:
+    close: "Agreement despite the pre-trained start."
+    lower: "Hypothesis: the published run starts from an MNLI-adapted checkpoint; here the start is the pre-trained model. Regression head initialisation may also matter."
+    higher: "Hypothesis: unspecified settings differ; the MNLI start is absent here, which would be expected to lower the score."
+average:
+  close: "Differences on individual tasks largely cancel."
+  lower: "Dominated by the tasks that start from an MNLI checkpoint in the paper."
+  higher: "Hypothesis: unspecified settings differ from the original runs."
