@@ -27,6 +27,12 @@
 | 2026-11-16 | YAML-style overrides parse `1e-4` as a float (PyYAML reads it as a string). | Found by a test; would have broken `--set lr=1e-4`. |
 | 2026-11-15 | The platform is Windows, so `setsid nohup` is replaced by a detached Python subprocess (`DETACHED_PROCESS`) started by the queue runner. | `setsid` is unavailable. |
 
+## Notes
+
+- 2026-11-16 00:27: the unit tests in `tests/test_training.py` were run once while the queue was
+  active, so a tiny model briefly shared the GPU with the first training run. This only cost GPU
+  time; results are unaffected. Tests are run with `CUDA_VISIBLE_DEVICES=` (CPU) during sweeps.
+
 ## Open issues
 
 None yet.
