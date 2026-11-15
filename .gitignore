@@ -1,0 +1,25 @@
+# environments and caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# run artifacts
+checkpoints/
+logs/
+wandb/
+outputs/
+*.pt
+*.safetensors
+
+# data and downloaded papers (fetched by scripts)
+data_cache/
+paper/*.pdf
+paper/_*.txt
