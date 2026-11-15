@@ -2,12 +2,16 @@
 
 ## Current state / Next steps
 
-- Stage: implementation, tests (27 passing) and smoke run done; timing probe running.
-- Next: `scripts/estimate_compute.py` -> `docs/compute_plan.md`, apply the budget ladder to
-  `configs/matrix.yaml` if needed, benchmarks (`make bench`, GPU idle), then core runs
-  (`make core-detached`), rank ablation, projection ablation, report and README.
-- Resume: `python scripts/launch_detached.py --matrix core` (skips runs already in
-  `results/runs.csv`).
+- Stage: tests (27 passing), smoke run, timing probe, compute plan and benchmarks done.
+  Full queue (`--matrix all`: core, rank ablation, projection ablation; 170 runs) launched on
+  2026-11-16 00:21 as a detached process; log `logs/queue_all.log`, per-run logs `logs/*.log`.
+- Estimated 52.0 GPU h for core + rank ablation (budget 72 h), plus 4.7 h for the projection
+  ablation (`docs/compute_plan.md`). No budget reduction applied.
+- While the queue runs: report script, README, docs (no GPU use).
+- If the runner died: re-run `python scripts/launch_detached.py --matrix all`. It skips finished
+  runs (`results/runs.csv`); an interrupted run resumes from `checkpoints/`.
+- Benchmarks are done (`results/bench.json`, taken with an idle GPU); do not re-run while
+  training is active.
 
 ## Decisions
 
