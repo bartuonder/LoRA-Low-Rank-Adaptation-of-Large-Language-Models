@@ -251,6 +251,33 @@ def block_variance(df, paper) -> str:
     return md_table(h, rows)
 
 
+def block_variance_note(df) -> str:
+    def mean_std(method, tasks):
+        vals = []
+        for t in tasks:
+            kw = {"method": method, "task": t}
+            if method == "lora":
+                kw.update(rank=8, targets=CORE_TARGETS)
+            s = stat(best_scores(df, **kw))
+            if s and not np.isnan(s["std"]):
+                vals.append(s["std"])
+        return float(np.mean(vals)) if len(vals) == len(tasks) else None
+
+    parts = []
+    for method, label in (("lora", "LoRA"), ("ft", "full fine-tuning")):
+        a, b = mean_std(method, ["rte", "mrpc"]), mean_std(method, ["sst2", "cola", "stsb"])
+        if a is None or b is None:
+            continue
+        rel = "larger than" if a > b else "not larger than"
+        parts.append(f"for {label} the mean seed std of RTE and MRPC ({a:.1f}) is {rel} that of "
+                     f"SST-2, CoLA and STS-B ({b:.1f})")
+    if not parts:
+        return "_Not enough finished runs for the seed-variance comparison._"
+    return ("Seed sensitivity, computed from the table above: " + "; ".join(parts) + ". "
+            "The dev sets of RTE and MRPC are small, so a single example changes accuracy by a "
+            "visible amount; the paper's own reported spread is printed in the last column.")
+
+
 def block_selection(df) -> str:
     rows = []
     for t, name, _ in TASKS:
@@ -625,6 +652,7 @@ def main() -> int:
         "rank_median": rank_med,
         "proj": block_proj(df),
         "variance": block_variance(df, paper),
+        "variance_note": block_variance_note(df),
         "bench": block_bench(),
         "coverage": cov,
         "runtime": block_runtime(df),
