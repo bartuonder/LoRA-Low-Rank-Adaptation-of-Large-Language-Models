@@ -10,6 +10,10 @@
   then rank ablation and projection ablation follow in queue order.
 - Progress (2026-11-16 18:40): core stage complete (50/50, no failures), results committed.
   Rank ablation running (RTE r=1 first); projection ablation last.
+- Progress (2026-11-17 01:45): rank ablation finished for RTE, MRPC, STS-B and CoLA, results
+  committed. Budget check before the SST-2 rank-ablation runs: 24.5 GPU h used so far; 15 SST-2
+  runs at about 2.4 h bring core + rank ablation to about 60.5 GPU h (limit 72), so no reduction
+  step is applied. SST-2 rank ablation running; projection ablation follows.
 - Re-estimate with measured run times (2026-11-16 07:05): SST-2 LoRA run 2.46 h and SST-2 FT
   0.50 h (probe-based plan: about 1.9 h and 0.4 h); small tasks ran faster than planned.
   Projected main budget (core + rank ablation) is about 62 GPU h, below the 72 h limit, so no
