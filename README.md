@@ -9,11 +9,12 @@ A from-scratch PyTorch implementation of Low-Rank Adaptation ([Hu et al., 2021](
 <!-- BEGIN:paper_vs_mine -->
 | Task | Metric | Paper (published) | Paper (dagger row) | Mine: mean ± std | Mine: median | Δ (median − paper) | Seeds | Likely reason (hypothesis) |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: | :--- |
-| SST-2 | Accuracy | 95.1 ± 0.2 | n/a | – | – | – | 0 | Not run. |
+| SST-2 | Accuracy | 95.1 ± 0.2 | n/a | 94.8 ± 0.2 | 94.8 | -0.3 | 5 | Hypothesis: unspecified settings (weight decay, optimizer betas, adapter initialisation scale) or bf16 autocast differ from the original runs. |
 | MRPC | Accuracy | 89.7 ± 0.7 | n/a | 89.2 ± 0.5 | 89.2 | -0.5 | 5 | Agreement despite the pre-trained start. |
 | CoLA | Matthews corr. | 63.4 ± 1.2 | n/a | 63.0 ± 1.0 | 63.1 | -0.3 | 5 | No MNLI start is involved; close agreement is expected. |
 | RTE | Accuracy | 86.6 ± 0.7 | n/a | 78.6 ± 0.5 | 78.7 | -7.9 | 5 | Hypothesis: the published run starts from an MNLI-adapted checkpoint, which is known to help the small RTE task considerably; here the start is the pre-trained model. |
 | STS-B | Pearson corr. | 91.5 ± 0.2 | n/a | 91.1 ± 0.1 | 91.0 | -0.5 | 5 | Hypothesis: the published run starts from an MNLI-adapted checkpoint; here the start is the pre-trained model. Regression head initialisation may also matter. |
+| Mean of the five tasks | – | 85.3 | n/a | – | 83.4 | -1.9 | – | Dominated by the tasks that start from an MNLI checkpoint in the paper. |
 <!-- END:paper_vs_mine -->
 
 Protocol: scores are GLUE **dev (validation)** results. As in the paper, every run is scored at its best epoch and the paper's statistic is the median over seeds; mean ± std over the same seeds is shown next to it. MRPC, RTE and STS-B start from the pre-trained RoBERTa-base checkpoint, not from an MNLI-adapted one. Table 2 of the paper has dagger rows only for RoBERTa-large, so no dagger value exists for the base model. The "likely reason" column is a text-only hypothesis (`docs/reasons.yaml`), not a verified cause.
@@ -21,8 +22,10 @@ Protocol: scores are GLUE **dev (validation)** results. As in the paper, every r
 ## Key findings
 
 <!-- BEGIN:key_findings -->
+- Across the five tasks, the mean of the per-task LoRA medians is 83.4 against 85.3 for the published LoRA row (-1.9).
 - The largest per-task difference is on RTE: median 78.7 versus 86.6 published (-7.9). MRPC, RTE and STS-B start from the pre-trained model here and from an MNLI-adapted checkpoint in the published row.
-- LoRA (median) is above my full fine-tuning run on 2 of 4 tasks; the mean difference of medians is -0.2. The FT run uses one fixed setting and no MNLI start.
+- LoRA (median) is above my full fine-tuning run on 3 of 5 tasks; the mean difference of medians is +0.0. The FT run uses one fixed setting and no MNLI start.
+- Seed sensitivity: the LoRA std is largest on CoLA (1.0) and smallest on STS-B (0.1); the mean std of RTE and MRPC is 0.5 against 0.4 for SST-2, CoLA and STS-B.
 <!-- END:key_findings -->
 
 ## Quickstart
@@ -46,8 +49,8 @@ Expected runtime on an RTX 4070 SUPER (estimate from the timing probe, next to t
 <!-- BEGIN:runtime -->
 | Target | Estimated GPU hours (probe) | Measured train hours | Runs finished |
 | :--- | ---: | ---: | ---: |
-| `make core` | 15.2 | 3.4 | 40 / 50 |
-| `make ablation` (ranks other than the default) | 36.8 | 0.0 | 0 / 75 |
+| `make core` | 15.2 | 17.8 | 50 / 50 |
+| `make ablation` (ranks other than the default) | 36.8 | 0.1 | 1 / 75 |
 | `make proj_ablation` (variants other than the default) | 4.7 | 0.0 | 0 / 45 |
 <!-- END:runtime -->
 
@@ -107,8 +110,8 @@ The full fine-tuning baseline uses one fixed point of the grid in the RoBERTa pa
 <!-- BEGIN:core -->
 | Task | Method | Trainable params (excl. head) | Best epoch: mean ± std | Best epoch: median | Min – max | Last epoch: mean ± std | Seeds |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
-| SST-2 | LoRA (r=8, Wq+Wv) | – | – | – | – | – | 0 |
-| SST-2 | Full fine-tuning | – | – | – | – | – | 0 |
+| SST-2 | LoRA (r=8, Wq+Wv) | 294,912 | 94.8 ± 0.2 | 94.8 | 94.5 – 95.0 | 93.9 ± 0.2 | 5 |
+| SST-2 | Full fine-tuning | 124,647,170 | 94.3 ± 0.4 | 94.2 | 93.9 – 94.7 | 93.7 ± 0.3 | 5 |
 | MRPC | LoRA (r=8, Wq+Wv) | 294,912 | 89.2 ± 0.5 | 89.2 | 88.5 – 89.7 | 87.8 ± 1.0 | 5 |
 | MRPC | Full fine-tuning | 124,647,170 | 90.0 ± 0.4 | 90.2 | 89.5 – 90.4 | 89.6 ± 0.6 | 5 |
 | CoLA | LoRA (r=8, Wq+Wv) | 294,912 | 63.0 ± 1.0 | 63.1 | 61.4 – 64.1 | 60.4 ± 2.0 | 5 |
@@ -124,7 +127,7 @@ Effect of the selection rule (LoRA, mean over seeds, best epoch versus last epoc
 <!-- BEGIN:selection -->
 | Task | Best-epoch mean | Last-epoch mean | Difference |
 | :--- | ---: | ---: | ---: |
-| SST-2 | – | – | – |
+| SST-2 | 94.8 | 93.9 | +0.8 |
 | MRPC | 89.2 | 87.8 | +1.4 |
 | CoLA | 63.0 | 60.4 | +2.6 |
 | RTE | 78.6 | 75.8 | +2.8 |
@@ -136,7 +139,7 @@ Effect of the selection rule (LoRA, mean over seeds, best epoch versus last epoc
 <!-- BEGIN:ft_comparison -->
 | Task | Paper FT (Liu et al.) | My FT: mean ± std | My FT: median | Paper LoRA | My LoRA: median | Paper: LoRA − FT | Mine: LoRA − FT (medians) |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| SST-2 | 94.8 | – | – | 95.1 ± 0.2 | – | +0.3 | – |
+| SST-2 | 94.8 | 94.3 ± 0.4 | 94.2 | 95.1 ± 0.2 | 94.8 | +0.3 | +0.7 |
 | MRPC | 90.2 | 90.0 ± 0.4 | 90.2 | 89.7 ± 0.7 | 89.2 | -0.5 | -1.0 |
 | CoLA | 63.6 | 62.5 ± 0.6 | 62.8 | 63.4 ± 1.2 | 63.1 | -0.2 | +0.3 |
 | RTE | 78.7 | 78.9 ± 0.9 | 78.7 | 86.6 ± 0.7 | 78.7 | +7.9 | +0.0 |
@@ -152,10 +155,10 @@ Mean ± std over seeds (alpha = r):
 <!-- BEGIN:rank_mean -->
 | Rank | LoRA params (excl. head) | SST-2 | MRPC | CoLA | RTE | STS-B |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
-| r = 1 | – | – | – | – | – | – |
+| r = 1 | 36,864 | – | – | – | 76.2 ± – (n=1) | – |
 | r = 2 | – | – | – | – | – | – |
 | r = 4 | – | – | – | – | – | – |
-| r = 8 | 294,912 | – | 89.2 ± 0.5 | 63.0 ± 1.0 | 78.6 ± 0.5 | 91.1 ± 0.1 |
+| r = 8 | 294,912 | 94.8 ± 0.2 | 89.2 ± 0.5 | 63.0 ± 1.0 | 78.6 ± 0.5 | 91.1 ± 0.1 |
 <!-- END:rank_mean -->
 
 Median over seeds:
@@ -163,10 +166,10 @@ Median over seeds:
 <!-- BEGIN:rank_median -->
 | Rank | LoRA params (excl. head) | SST-2 | MRPC | CoLA | RTE | STS-B |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
-| r = 1 | – | – | – | – | – | – |
+| r = 1 | 36,864 | – | – | – | 76.2 | – |
 | r = 2 | – | – | – | – | – | – |
 | r = 4 | – | – | – | – | – | – |
-| r = 8 | 294,912 | – | 89.2 | 63.1 | 78.7 | 91.0 |
+| r = 8 | 294,912 | 94.8 | 89.2 | 63.1 | 78.7 | 91.0 |
 <!-- END:rank_median -->
 
 ![Rank ablation](figures/rank_ablation.png)
@@ -195,11 +198,11 @@ Which attention matrices receive LoRA, with the trainable LoRA parameter count h
 | MRPC | 5 | 0.5 | 1.2 | 0.4 | 1.0 | 0.7 |
 | STS-B | 5 | 0.1 | 0.2 | 0.1 | 0.3 | 0.2 |
 | CoLA | 5 | 1.0 | 2.7 | 0.6 | 1.4 | 1.2 |
-| SST-2 | 0 | – | – | – | – | 0.2 |
+| SST-2 | 5 | 0.2 | 0.5 | 0.4 | 0.8 | 0.2 |
 <!-- END:variance -->
 
 <!-- BEGIN:variance_note -->
-_Not enough finished runs for the seed-variance comparison._
+Seed sensitivity, computed from the table above: for LoRA the mean seed std of RTE and MRPC (0.5) is larger than that of SST-2, CoLA and STS-B (0.4); for full fine-tuning the mean seed std of RTE and MRPC (0.6) is larger than that of SST-2, CoLA and STS-B (0.4). The dev sets of RTE and MRPC are small, so a single example changes accuracy by a visible amount; the paper's own reported spread is printed in the last column.
 <!-- END:variance_note -->
 
 ![Per-seed scores](figures/seed_variance.png)
@@ -276,12 +279,12 @@ Run coverage (planned versus finished; anything not finished is not reported):
 | Core (LoRA and FT) | MRPC | 10 | 10 | 0 |
 | Core (LoRA and FT) | STS-B | 10 | 10 | 0 |
 | Core (LoRA and FT) | CoLA | 10 | 10 | 0 |
-| Core (LoRA and FT) | SST-2 | 10 | 0 | 10 |
-| Rank ablation | RTE | 20 | 5 | 15 |
+| Core (LoRA and FT) | SST-2 | 10 | 10 | 0 |
+| Rank ablation | RTE | 20 | 6 | 14 |
 | Rank ablation | MRPC | 20 | 5 | 15 |
 | Rank ablation | STS-B | 20 | 5 | 15 |
 | Rank ablation | CoLA | 20 | 5 | 15 |
-| Rank ablation | SST-2 | 20 | 0 | 20 |
+| Rank ablation | SST-2 | 20 | 5 | 15 |
 | Projection ablation | RTE | 20 | 5 | 15 |
 | Projection ablation | MRPC | 20 | 5 | 15 |
 | Projection ablation | STS-B | 20 | 5 | 15 |
