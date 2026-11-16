@@ -13,6 +13,10 @@
   Projected main budget (core + rank ablation) is about 62 GPU h, below the 72 h limit, so no
   reduction step applies. `scripts/queue_status.py` overstates the remainder because it counts
   keys shared between groups more than once. Re-check before the SST-2 rank-ablation runs start.
+- 2026-11-16 12:29: a long background wait of the monitoring session was stopped by a host
+  low-memory guard. The queue runner and training child were not affected (no failure, no
+  restart). Checked at 13:58: 15.6 GB RAM, 5.7 GB free; the largest process is the training
+  child (1.5 GB), then the IDE (1.5 GB). Monitoring now uses short polls (20 min).
 - Estimated 52.0 GPU h for core + rank ablation (budget 72 h), plus 4.7 h for the projection
   ablation (`docs/compute_plan.md`). No budget reduction applied.
 - While the queue runs: report script, README, docs (no GPU use).
