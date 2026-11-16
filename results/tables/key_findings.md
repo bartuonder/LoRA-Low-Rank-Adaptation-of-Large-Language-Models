@@ -1,0 +1,2 @@
+- The largest per-task difference is on RTE: median 78.7 versus 86.6 published (-7.9). MRPC, RTE and STS-B start from the pre-trained model here and from an MNLI-adapted checkpoint in the published row.
+- LoRA (median) is above my full fine-tuning run on 2 of 4 tasks; the mean difference of medians is -0.2. The FT run uses one fixed setting and no MNLI start.

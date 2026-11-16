@@ -1,0 +1,12 @@
+| Task | Method | Trainable params (excl. head) | Best epoch: mean ± std | Best epoch: median | Min – max | Last epoch: mean ± std | Seeds |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SST-2 | LoRA (r=8, Wq+Wv) | – | – | – | – | – | 0 |
+| SST-2 | Full fine-tuning | – | – | – | – | – | 0 |
+| MRPC | LoRA (r=8, Wq+Wv) | 294,912 | 89.2 ± 0.5 | 89.2 | 88.5 – 89.7 | 87.8 ± 1.0 | 5 |
+| MRPC | Full fine-tuning | 124,647,170 | 90.0 ± 0.4 | 90.2 | 89.5 – 90.4 | 89.6 ± 0.6 | 5 |
+| CoLA | LoRA (r=8, Wq+Wv) | 294,912 | 63.0 ± 1.0 | 63.1 | 61.4 – 64.1 | 60.4 ± 2.0 | 5 |
+| CoLA | Full fine-tuning | 124,647,170 | 62.5 ± 0.6 | 62.8 | 61.5 – 62.9 | 60.4 ± 1.2 | 5 |
+| RTE | LoRA (r=8, Wq+Wv) | 294,912 | 78.6 ± 0.5 | 78.7 | 78.0 – 79.1 | 75.8 ± 0.9 | 5 |
+| RTE | Full fine-tuning | 124,647,170 | 78.9 ± 0.9 | 78.7 | 78.0 – 80.1 | 77.9 ± 1.3 | 5 |
+| STS-B | LoRA (r=8, Wq+Wv) | 294,912 | 91.1 ± 0.1 | 91.0 | 91.0 – 91.2 | 90.8 ± 0.1 | 5 |
+| STS-B | Full fine-tuning | 124,646,401 | 90.9 ± 0.1 | 91.0 | 90.7 – 91.0 | 90.8 ± 0.1 | 5 |
