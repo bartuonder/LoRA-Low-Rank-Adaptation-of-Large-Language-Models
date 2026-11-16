@@ -1,6 +1,6 @@
 | Task | Best-epoch mean | Last-epoch mean | Difference |
 | :--- | ---: | ---: | ---: |
-| SST-2 | – | – | – |
+| SST-2 | 94.8 | 93.9 | +0.8 |
 | MRPC | 89.2 | 87.8 | +1.4 |
 | CoLA | 63.0 | 60.4 | +2.6 |
 | RTE | 78.6 | 75.8 | +2.8 |

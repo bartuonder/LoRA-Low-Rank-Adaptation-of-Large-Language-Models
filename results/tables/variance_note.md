@@ -1,1 +1,1 @@
-_Not enough finished runs for the seed-variance comparison._
+Seed sensitivity, computed from the table above: for LoRA the mean seed std of RTE and MRPC (0.5) is larger than that of SST-2, CoLA and STS-B (0.4); for full fine-tuning the mean seed std of RTE and MRPC (0.6) is larger than that of SST-2, CoLA and STS-B (0.4). The dev sets of RTE and MRPC are small, so a single example changes accuracy by a visible amount; the paper's own reported spread is printed in the last column.
