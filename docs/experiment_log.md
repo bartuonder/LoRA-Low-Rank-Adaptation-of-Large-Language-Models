@@ -8,6 +8,11 @@
 - Progress (2026-11-16 04:05): core small tasks (RTE, MRPC, STS-B, CoLA; LoRA and full
   fine-tuning; seeds 0-4) finished, no failures; results committed. SST-2 core runs started,
   then rank ablation and projection ablation follow in queue order.
+- Re-estimate with measured run times (2026-11-16 07:05): SST-2 LoRA run 2.46 h and SST-2 FT
+  0.50 h (probe-based plan: about 1.9 h and 0.4 h); small tasks ran faster than planned.
+  Projected main budget (core + rank ablation) is about 62 GPU h, below the 72 h limit, so no
+  reduction step applies. `scripts/queue_status.py` overstates the remainder because it counts
+  keys shared between groups more than once. Re-check before the SST-2 rank-ablation runs start.
 - Estimated 52.0 GPU h for core + rank ablation (budget 72 h), plus 4.7 h for the projection
   ablation (`docs/compute_plan.md`). No budget reduction applied.
 - While the queue runs: report script, README, docs (no GPU use).
