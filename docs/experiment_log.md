@@ -5,6 +5,9 @@
 - Stage: tests (27 passing), smoke run, timing probe, compute plan and benchmarks done.
   Full queue (`--matrix all`: core, rank ablation, projection ablation; 170 runs) launched on
   2026-11-16 00:21 as a detached process; log `logs/queue_all.log`, per-run logs `logs/*.log`.
+- Progress (2026-11-16 04:05): core small tasks (RTE, MRPC, STS-B, CoLA; LoRA and full
+  fine-tuning; seeds 0-4) finished, no failures; results committed. SST-2 core runs started,
+  then rank ablation and projection ablation follow in queue order.
 - Estimated 52.0 GPU h for core + rank ablation (budget 72 h), plus 4.7 h for the projection
   ablation (`docs/compute_plan.md`). No budget reduction applied.
 - While the queue runs: report script, README, docs (no GPU use).
