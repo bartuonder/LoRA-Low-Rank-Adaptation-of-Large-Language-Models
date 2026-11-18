@@ -13,7 +13,7 @@
 - Nothing is pending. To redo a stage: `python scripts/launch_detached.py --matrix all` skips
   finished runs (`results/runs.csv`); an interrupted run resumes from `checkpoints/`.
 
-## Notes
+## Compute and monitoring notes
 
 - Compute: SST-2 runs took longer than the probe-based plan (LoRA 2.4 h, FT 0.5 h per run);
   small tasks ran faster. `scripts/queue_status.py` overstates the remainder because it counts
