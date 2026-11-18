@@ -525,7 +525,7 @@ def fig_variance(df):
         ft = best_scores(df, method="ft", task=t)
         _axes_strip(ax, [lo, ft], [C1, C2], ["LoRA", "Full FT"])
         ax.set_title(NAME[t])
-        ax.set_ylabel(METRIC[t] + " (×100)" if t == SMALL_FIRST[0] else "")
+        ax.set_ylabel("dev score (×100)" if t == SMALL_FIRST[0] else "")
     fig.suptitle("Per-seed dev score at the best epoch (each point is one seed)", x=0.01,
                  ha="left", fontsize=10, color=INK2)
     fig.tight_layout()
