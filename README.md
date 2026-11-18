@@ -52,7 +52,7 @@ Expected runtime on an RTX 4070 SUPER (estimate from the timing probe, next to t
 | :--- | ---: | ---: | ---: |
 | `make core` | 15.2 | 17.8 | 50 / 50 |
 | `make ablation` (ranks other than the default) | 36.8 | 43.4 | 75 / 75 |
-| `make proj_ablation` (variants other than the default) | 4.7 | 0.0 | 0 / 45 |
+| `make proj_ablation` (variants other than the default) | 4.7 | 4.8 | 45 / 45 |
 <!-- END:runtime -->
 
 ## Method
@@ -182,10 +182,10 @@ Which attention matrices receive LoRA, with the trainable LoRA parameter count h
 <!-- BEGIN:proj -->
 | Adapted matrices | r | LoRA params (excl. head) | RTE: mean ± std | RTE: median | MRPC: mean ± std | MRPC: median | STS-B: mean ± std | STS-B: median |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Wq | 16 | – | – | – | – | – | – | – |
-| Wv | 16 | – | – | – | – | – | – | – |
+| Wq | 16 | 294,912 | 74.8 ± 0.8 | 75.1 | 87.5 ± 0.2 | 87.5 | 89.8 ± 0.2 | 89.8 |
+| Wv | 16 | 294,912 | 80.9 ± 0.7 | 80.9 | 89.3 ± 0.6 | 89.5 | 91.1 ± 0.2 | 91.1 |
 | Wq+Wv (paper default) | 8 | 294,912 | 78.6 ± 0.5 | 78.7 | 89.2 ± 0.5 | 89.2 | 91.1 ± 0.1 | 91.0 |
-| Wq+Wk+Wv+Wo | 4 | – | – | – | – | – | – | – |
+| Wq+Wk+Wv+Wo | 4 | 294,912 | 80.6 ± 1.4 | 80.5 | 89.3 ± 0.7 | 89.5 | 90.9 ± 0.1 | 90.9 |
 <!-- END:proj -->
 
 ![Projection ablation](figures/projection_ablation.png)
@@ -286,9 +286,9 @@ Run coverage (planned versus finished; anything not finished is not reported):
 | Rank ablation | STS-B | 20 | 20 | 0 |
 | Rank ablation | CoLA | 20 | 20 | 0 |
 | Rank ablation | SST-2 | 20 | 20 | 0 |
-| Projection ablation | RTE | 20 | 5 | 15 |
-| Projection ablation | MRPC | 20 | 5 | 15 |
-| Projection ablation | STS-B | 20 | 5 | 15 |
+| Projection ablation | RTE | 20 | 20 | 0 |
+| Projection ablation | MRPC | 20 | 20 | 0 |
+| Projection ablation | STS-B | 20 | 20 | 0 |
 
 Runs flagged as diverged (non-finite loss): 0. Permanent failures: 0.
 <!-- END:coverage -->
