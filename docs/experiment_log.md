@@ -14,6 +14,10 @@
   committed. Budget check before the SST-2 rank-ablation runs: 24.5 GPU h used so far; 15 SST-2
   runs at about 2.4 h bring core + rank ablation to about 60.5 GPU h (limit 72), so no reduction
   step is applied. SST-2 rank ablation running; projection ablation follows.
+- Progress (2026-11-18 14:10): rank ablation complete (100/100 including shared r=8 runs, no
+  failures), results committed. Projection ablation running (RTE, MRPC, STS-B; Wq r=16, Wv r=16,
+  Wq+Wk+Wv+Wo r=4; Wq+Wv r=8 reused from core). Remaining after that: final report,
+  README review, final checklist.
 - Re-estimate with measured run times (2026-11-16 07:05): SST-2 LoRA run 2.46 h and SST-2 FT
   0.50 h (probe-based plan: about 1.9 h and 0.4 h); small tasks ran faster than planned.
   Projected main budget (core + rank ablation) is about 62 GPU h, below the 72 h limit, so no
