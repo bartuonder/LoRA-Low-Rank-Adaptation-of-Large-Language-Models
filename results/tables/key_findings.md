@@ -1,5 +1,5 @@
 - Across the five tasks, the mean of the per-task LoRA medians is 83.4 against 85.3 for the published LoRA row (-1.9).
 - The largest per-task difference is on RTE: median 78.7 versus 86.6 published (-7.9). MRPC, RTE and STS-B start from the pre-trained model here and from an MNLI-adapted checkpoint in the published row.
 - LoRA (median) is above my full fine-tuning run on 3 of 5 tasks; the mean difference of medians is +0.0. The FT run uses one fixed setting and no MNLI start.
-- Rank ablation: the mean score at r = 1 differs from r = 8 by no more than the larger seed std on 1 of 4 tasks.
+- Rank ablation: the mean score at r = 1 differs from r = 8 by no more than the larger seed std on 1 of 5 tasks.
 - Seed sensitivity: the LoRA std is largest on CoLA (1.0) and smallest on STS-B (0.1); the mean std of RTE and MRPC is 0.5 against 0.4 for SST-2, CoLA and STS-B.
