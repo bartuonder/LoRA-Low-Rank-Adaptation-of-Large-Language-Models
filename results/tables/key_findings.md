@@ -3,3 +3,4 @@
 - LoRA (median) is above my full fine-tuning run on 3 of 5 tasks; the mean difference of medians is +0.0. The FT run uses one fixed setting and no MNLI start.
 - Rank ablation: the mean score at r = 1 differs from r = 8 by no more than the larger seed std on 1 of 5 tasks.
 - Seed sensitivity: the LoRA std is largest on CoLA (1.0) and smallest on STS-B (0.1); the mean std of RTE and MRPC is 0.5 against 0.4 for SST-2, CoLA and STS-B.
+- Projection ablation (equal LoRA parameter count): the mean score with Wv only is above Wq only by +6.1 on RTE, +1.9 on MRPC, +1.3 on STS-B.

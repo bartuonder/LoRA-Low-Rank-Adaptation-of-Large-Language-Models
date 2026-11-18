@@ -497,7 +497,20 @@ def findings(df, info, paper) -> list[str]:
         out.append(f"Seed sensitivity: the LoRA std is largest on {NAME[hi]} ({stds[hi]:.1f}) and "
                    f"smallest on {NAME[lo]} ({stds[lo]:.1f}); the mean std of RTE and MRPC is "
                    f"{small:.1f} against {big:.1f} for SST-2, CoLA and STS-B.")
-    return ["- " + s for s in out[:5]]
+    pv = {v["name"]: v for v in proj_variants()}
+    if "q_only" in pv and "v_only" in pv:
+        diffs = []
+        for t in ("rte", "mrpc", "stsb"):
+            q = stat(best_scores(df, method="lora", task=t, rank=pv["q_only"]["r"],
+                                 targets=pv["q_only"]["targets"]))
+            v = stat(best_scores(df, method="lora", task=t, rank=pv["v_only"]["r"],
+                                 targets=pv["v_only"]["targets"]))
+            if q and v:
+                diffs.append(f"{v['mean'] - q['mean']:+.1f} on {NAME[t]}")
+        if len(diffs) == 3:
+            out.append("Projection ablation (equal LoRA parameter count): the mean score with "
+                       "Wv only is above Wq only by " + ", ".join(diffs) + ".")
+    return ["- " + s for s in out[:6]]
 
 
 # ---------------------------------------------------------------- figures

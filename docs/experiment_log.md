@@ -2,38 +2,27 @@
 
 ## Current state / Next steps
 
-- Stage: tests (27 passing), smoke run, timing probe, compute plan and benchmarks done.
-  Full queue (`--matrix all`: core, rank ablation, projection ablation; 170 runs) launched on
-  2026-11-16 00:21 as a detached process; log `logs/queue_all.log`, per-run logs `logs/*.log`.
-- Progress (2026-11-16 04:05): core small tasks (RTE, MRPC, STS-B, CoLA; LoRA and full
-  fine-tuning; seeds 0-4) finished, no failures; results committed. SST-2 core runs started,
-  then rank ablation and projection ablation follow in queue order.
-- Progress (2026-11-16 18:40): core stage complete (50/50, no failures), results committed.
-  Rank ablation running (RTE r=1 first); projection ablation last.
-- Progress (2026-11-17 01:45): rank ablation finished for RTE, MRPC, STS-B and CoLA, results
-  committed. Budget check before the SST-2 rank-ablation runs: 24.5 GPU h used so far; 15 SST-2
-  runs at about 2.4 h bring core + rank ablation to about 60.5 GPU h (limit 72), so no reduction
-  step is applied. SST-2 rank ablation running; projection ablation follows.
-- Progress (2026-11-18 14:10): rank ablation complete (100/100 including shared r=8 runs, no
-  failures), results committed. Projection ablation running (RTE, MRPC, STS-B; Wq r=16, Wv r=16,
-  Wq+Wk+Wv+Wo r=4; Wq+Wv r=8 reused from core). Remaining after that: final report,
-  README review, final checklist.
-- Re-estimate with measured run times (2026-11-16 07:05): SST-2 LoRA run 2.46 h and SST-2 FT
-  0.50 h (probe-based plan: about 1.9 h and 0.4 h); small tasks ran faster than planned.
-  Projected main budget (core + rank ablation) is about 62 GPU h, below the 72 h limit, so no
-  reduction step applies. `scripts/queue_status.py` overstates the remainder because it counts
-  keys shared between groups more than once. Re-check before the SST-2 rank-ablation runs start.
-- 2026-11-16 12:29: a long background wait of the monitoring session was stopped by a host
-  low-memory guard. The queue runner and training child were not affected (no failure, no
-  restart). Checked at 13:58: 15.6 GB RAM, 5.7 GB free; the largest process is the training
-  child (1.5 GB), then the IDE (1.5 GB). Monitoring now uses short polls (20 min).
-- Estimated 52.0 GPU h for core + rank ablation (budget 72 h), plus 4.7 h for the projection
-  ablation (`docs/compute_plan.md`). No budget reduction applied.
-- While the queue runs: report script, README, docs (no GPU use).
-- If the runner died: re-run `python scripts/launch_detached.py --matrix all`. It skips finished
-  runs (`results/runs.csv`); an interrupted run resumes from `checkpoints/`.
-- Benchmarks are done (`results/bench.json`, taken with an idle GPU); do not re-run while
-  training is active.
+- All stages finished (2026-11-18 19:30): core (50 runs), rank ablation (100 runs including the
+  shared r=8 runs) and projection ablation (60 runs including the shared Wq+Wv runs); 170 of 170
+  runs, no failures, no diverged runs. Results, tables and figures are committed.
+- Budget: measured training time 17.8 h (core), 43.4 h (rank ablation, new ranks) and 4.8 h
+  (projection ablation, new variants); no reduction step of the ladder was applied.
+- Checks done: 27 tests pass, lint clean, `scripts/make_report.py` regenerates all tables,
+  figures and README blocks without changes, no remotes, all commits authored by the repository
+  owner, no forbidden content in tracked files or commit messages.
+- Nothing is pending. To redo a stage: `python scripts/launch_detached.py --matrix all` skips
+  finished runs (`results/runs.csv`); an interrupted run resumes from `checkpoints/`.
+
+## Notes
+
+- Compute: SST-2 runs took longer than the probe-based plan (LoRA 2.4 h, FT 0.5 h per run);
+  small tasks ran faster. `scripts/queue_status.py` overstates the remainder because it counts
+  keys shared between groups more than once.
+- Monitoring sessions were interrupted three times by a host low-memory guard on a 15.6 GB
+  machine (largest processes: the training child at about 1.6 GB and the IDE at about 2 GB). The
+  queue runner and training children were never affected.
+- Earlier in the sweep, unit tests were run on the GPU once while the queue was active; it did
+  not affect any result. Tests run with `CUDA_VISIBLE_DEVICES=` during sweeps.
 
 ## Decisions
 
