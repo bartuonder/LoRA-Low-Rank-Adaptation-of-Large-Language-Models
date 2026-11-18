@@ -25,7 +25,7 @@ Protocol: scores are GLUE **dev (validation)** results. As in the paper, every r
 - Across the five tasks, the mean of the per-task LoRA medians is 83.4 against 85.3 for the published LoRA row (-1.9).
 - The largest per-task difference is on RTE: median 78.7 versus 86.6 published (-7.9). MRPC, RTE and STS-B start from the pre-trained model here and from an MNLI-adapted checkpoint in the published row.
 - LoRA (median) is above my full fine-tuning run on 3 of 5 tasks; the mean difference of medians is +0.0. The FT run uses one fixed setting and no MNLI start.
-- Rank ablation: the mean score at r = 1 differs from r = 8 by no more than the larger seed std on 1 of 4 tasks.
+- Rank ablation: the mean score at r = 1 differs from r = 8 by no more than the larger seed std on 1 of 5 tasks.
 - Seed sensitivity: the LoRA std is largest on CoLA (1.0) and smallest on STS-B (0.1); the mean std of RTE and MRPC is 0.5 against 0.4 for SST-2, CoLA and STS-B.
 <!-- END:key_findings -->
 
@@ -51,7 +51,7 @@ Expected runtime on an RTX 4070 SUPER (estimate from the timing probe, next to t
 | Target | Estimated GPU hours (probe) | Measured train hours | Runs finished |
 | :--- | ---: | ---: | ---: |
 | `make core` | 15.2 | 17.8 | 50 / 50 |
-| `make ablation` (ranks other than the default) | 36.8 | 6.7 | 60 / 75 |
+| `make ablation` (ranks other than the default) | 36.8 | 43.4 | 75 / 75 |
 | `make proj_ablation` (variants other than the default) | 4.7 | 0.0 | 0 / 45 |
 <!-- END:runtime -->
 
@@ -156,9 +156,9 @@ Mean ± std over seeds (alpha = r):
 <!-- BEGIN:rank_mean -->
 | Rank | LoRA params (excl. head) | SST-2 | MRPC | CoLA | RTE | STS-B |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
-| r = 1 | 36,864 | – | 88.2 ± 0.6 | 62.5 ± 0.7 | 77.5 ± 0.8 | 90.8 ± 0.1 |
-| r = 2 | 73,728 | – | 88.9 ± 0.6 | 63.1 ± 0.7 | 77.7 ± 0.9 | 90.9 ± 0.1 |
-| r = 4 | 147,456 | – | 88.7 ± 0.6 | 64.5 ± 0.6 | 78.1 ± 0.8 | 91.0 ± 0.1 |
+| r = 1 | 36,864 | 94.1 ± 0.3 | 88.2 ± 0.6 | 62.5 ± 0.7 | 77.5 ± 0.8 | 90.8 ± 0.1 |
+| r = 2 | 73,728 | 94.3 ± 0.2 | 88.9 ± 0.6 | 63.1 ± 0.7 | 77.7 ± 0.9 | 90.9 ± 0.1 |
+| r = 4 | 147,456 | 94.6 ± 0.2 | 88.7 ± 0.6 | 64.5 ± 0.6 | 78.1 ± 0.8 | 91.0 ± 0.1 |
 | r = 8 | 294,912 | 94.8 ± 0.2 | 89.2 ± 0.5 | 63.0 ± 1.0 | 78.6 ± 0.5 | 91.1 ± 0.1 |
 <!-- END:rank_mean -->
 
@@ -167,9 +167,9 @@ Median over seeds:
 <!-- BEGIN:rank_median -->
 | Rank | LoRA params (excl. head) | SST-2 | MRPC | CoLA | RTE | STS-B |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
-| r = 1 | 36,864 | – | 88.0 | 62.1 | 77.6 | 90.8 |
-| r = 2 | 73,728 | – | 89.2 | 63.5 | 77.6 | 90.9 |
-| r = 4 | 147,456 | – | 89.0 | 64.4 | 77.6 | 91.0 |
+| r = 1 | 36,864 | 94.0 | 88.0 | 62.1 | 77.6 | 90.8 |
+| r = 2 | 73,728 | 94.3 | 89.2 | 63.5 | 77.6 | 90.9 |
+| r = 4 | 147,456 | 94.6 | 89.0 | 64.4 | 77.6 | 91.0 |
 | r = 8 | 294,912 | 94.8 | 89.2 | 63.1 | 78.7 | 91.0 |
 <!-- END:rank_median -->
 
@@ -285,7 +285,7 @@ Run coverage (planned versus finished; anything not finished is not reported):
 | Rank ablation | MRPC | 20 | 20 | 0 |
 | Rank ablation | STS-B | 20 | 20 | 0 |
 | Rank ablation | CoLA | 20 | 20 | 0 |
-| Rank ablation | SST-2 | 20 | 5 | 15 |
+| Rank ablation | SST-2 | 20 | 20 | 0 |
 | Projection ablation | RTE | 20 | 5 | 15 |
 | Projection ablation | MRPC | 20 | 5 | 15 |
 | Projection ablation | STS-B | 20 | 5 | 15 |
