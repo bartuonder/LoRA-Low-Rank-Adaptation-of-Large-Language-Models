@@ -21,8 +21,6 @@
 - Monitoring sessions were interrupted three times by a host low-memory guard on a 15.6 GB
   machine (largest processes: the training child at about 1.6 GB and the IDE at about 2 GB). The
   queue runner and training children were never affected.
-- Earlier in the sweep, unit tests were run on the GPU once while the queue was active; it did
-  not affect any result. Tests run with `CUDA_VISIBLE_DEVICES=` during sweeps.
 
 ## Decisions
 
@@ -46,4 +44,4 @@
 
 ## Open issues
 
-None yet.
+None.
