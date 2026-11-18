@@ -10,8 +10,8 @@
 | Rank ablation | STS-B | 20 | 20 | 0 |
 | Rank ablation | CoLA | 20 | 20 | 0 |
 | Rank ablation | SST-2 | 20 | 20 | 0 |
-| Projection ablation | RTE | 20 | 5 | 15 |
-| Projection ablation | MRPC | 20 | 5 | 15 |
-| Projection ablation | STS-B | 20 | 5 | 15 |
+| Projection ablation | RTE | 20 | 20 | 0 |
+| Projection ablation | MRPC | 20 | 20 | 0 |
+| Projection ablation | STS-B | 20 | 20 | 0 |
 
 Runs flagged as diverged (non-finite loss): 0. Permanent failures: 0.
